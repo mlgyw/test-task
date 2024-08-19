@@ -17,3 +17,10 @@ export class PublicUserDto {
   name: string;
   email: string;
 }
+
+export class UserDto {
+  id: string
+  name: string;
+  email: string;
+  password: string;
+}

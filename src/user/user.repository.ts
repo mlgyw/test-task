@@ -16,4 +16,8 @@ export class UserRepository {
       throw err;
     }
   }
+
+  async findUserByEmail(email: string): Promise<User>{
+     return this.userModel.findOne({email}).exec()
+  }
 }
