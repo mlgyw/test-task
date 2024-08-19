@@ -5,7 +5,13 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-  @Prop({ type: String, default: function() { return this._id.toString(); }, select: false })
+  @Prop({
+    type: String,
+    default: function () {
+      return this._id.toString();
+    },
+    select: false,
+  })
   id: string;
 
   @Prop({ required: true })

@@ -8,12 +8,12 @@ export class CreateUserDto {
   @IsEmail()
   email: string;
 
- @IsString()
+  @IsString()
   password: string;
 }
 
 export class PublicUserDto {
-  id: string; 
+  id: string;
   name: string;
   email: string;
 }

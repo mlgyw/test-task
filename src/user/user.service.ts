@@ -9,23 +9,21 @@ export class UserService {
 
   private toPublicUserDto(user: User): PublicUserDto {
     return {
-        id: user.id.toString(),
-        name: user.name,
-        email: user.email,
+      id: user.id.toString(),
+      name: user.name,
+      email: user.email,
     };
-}
-
-  async create(createUserDto: CreateUserDto): Promise<PublicUserDto> {
-	try{
- 	const dbUser = await this.userRepository.create(createUserDto)
-    return this.toPublicUserDto(dbUser);
-	}
-	catch(err){
-		if (err.code === 11000) {
-        throw new Error('Пользователь с таким email уже существует');
-      }
-		throw new Error('Не удалось создать пользователя');
-	}
   }
 
+  async create(createUserDto: CreateUserDto): Promise<PublicUserDto> {
+    try {
+      const dbUser = await this.userRepository.create(createUserDto);
+      return this.toPublicUserDto(dbUser);
+    } catch (err) {
+      if (err.code === 11000) {
+        throw new Error('Пользователь с таким email уже существует');
+      }
+      throw new Error('Не удалось создать пользователя');
+    }
+  }
 }

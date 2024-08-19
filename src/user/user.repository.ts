@@ -1,5 +1,3 @@
-// src/user/user.service.ts
-
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -10,13 +8,12 @@ import { CreateUserDto } from '@/user/dto/user.dto';
 export class UserRepository {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-async create(createUserDto: CreateUserDto): Promise<User> {
-  try{
-    const createdUser = new this.userModel(createUserDto);
-    return await createdUser.save();
-  }
-  catch(err){
-    throw err;
-  }
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    try {
+      const createdUser = new this.userModel(createUserDto);
+      return await createdUser.save();
+    } catch (err) {
+      throw err;
+    }
   }
 }
