@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserRepository } from '@/user/user.repository';
 import { CreateUserDto, PublicUserDto, UserDto } from '@/user/dto/user.dto';
 import { User } from '@/user/schemas/user.schema';
@@ -56,10 +60,14 @@ export class UserService {
     if (!user) {
       throw new UnauthorizedException(USER_WRONG_EMAIL_ERROR);
     }
-    const isCorrectPass:boolean = await compare(password, user.password);
+    const isCorrectPass: boolean = await compare(password, user.password);
     if (!isCorrectPass) {
       throw new UnauthorizedException(USER_WRONG_PASSWORD_ERROR);
     }
     return { email: user.email };
+  }
+
+  async addNoteToUser(userID: string, noteID: string): Promise<void> {
+    return await this.userRepository.addNoteToUser(userID, noteID);
   }
 }

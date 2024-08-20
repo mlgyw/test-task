@@ -2,7 +2,11 @@ import { UserService } from '@/user/user.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AUTH_UNKNOWN_ERROR } from '@/auth/auth.constants';
-import { AuthSignInDto, AuthSignUpDto, AuthTokensDto } from '@/auth/dto/auth.dto';
+import {
+  AuthSignInDto,
+  AuthSignUpDto,
+  AuthTokensDto,
+} from '@/auth/dto/auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +24,10 @@ export class AuthService {
   }
 
   async login(authSignInDto: AuthSignInDto): Promise<AuthTokensDto> {
-    const user = await this.userService.validateUser(authSignInDto.email, authSignInDto.password);
+    const user = await this.userService.validateUser(
+      authSignInDto.email,
+      authSignInDto.password,
+    );
     if (!user) {
       throw new BadRequestException(AUTH_UNKNOWN_ERROR);
     }
