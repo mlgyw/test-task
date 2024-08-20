@@ -19,7 +19,7 @@ export class PublicUserDto {
 }
 
 export class UserDto {
-  id: string
+  id: string;
   name: string;
   email: string;
   password: string;

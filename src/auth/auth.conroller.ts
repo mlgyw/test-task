@@ -12,19 +12,19 @@ import { AuthSignInDto, AuthSignUpDto } from '@/auth/dto/auth.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post("sign-up")
+  @Post('sign-up')
   async signUp(@Body() authSignUpDto: AuthSignUpDto) {
     try {
-      return await this.authService.register(authSignUpDto)
+      return await this.authService.register(authSignUpDto);
     } catch (err) {
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
     }
   }
 
-  @Post("sign-in")
+  @Post('sign-in')
   async signIn(@Body() authSignInDto: AuthSignInDto) {
     try {
-      return await this.authService.login(authSignInDto)
+      return await this.authService.login(authSignInDto);
     } catch (err) {
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
     }

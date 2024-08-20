@@ -17,7 +17,22 @@ export class UserRepository {
     }
   }
 
-  async findUserByEmail(email: string): Promise<User>{
-     return this.userModel.findOne({email}).exec()
+  async findUserByEmail(email: string): Promise<User> {
+    const user = await this.userModel.findOne({ email }).exec();
+    return {
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      notes: user.notes,
+    };
+  }
+
+  async addNoteToUser(userID: string, noteID: string): Promise<void> {
+    return this.userModel.findByIdAndUpdate(
+      userID,
+      { $push: { notes: noteID } },
+      { new: true },
+    );
   }
 }

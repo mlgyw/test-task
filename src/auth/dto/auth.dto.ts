@@ -1,7 +1,7 @@
 import { IsEmail, IsString, Length } from 'class-validator';
 
 export class AuthTokensDto {
-  accessToken: string
+  accessToken: string;
   refreshToken: string;
 }
 
