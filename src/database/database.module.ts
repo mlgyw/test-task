@@ -1,3 +1,4 @@
+import { getMongoUrl } from '@/configs/mongo.config';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -8,9 +9,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        uri: `${configService.get('MONGO_PREFIX')}://${configService.get('MONGO_HOST')}:${configService.get('MONGO_PORT')}/${configService.get('MONGO_DB_NAME')}`,
-      }),
+      useFactory: getMongoUrl,
     }),
   ],
 })
