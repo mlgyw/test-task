@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Note, NoteDocument } from '@/note/schemas/note.schema';
@@ -70,7 +74,7 @@ export class NoteRepository {
       .exec();
 
     if (result.deletedCount === 0) {
-      throw new NotFoundException(NOTE_DOESNT_DELETE);
+      throw new BadRequestException(NOTE_DOESNT_DELETE);
     }
   }
 
