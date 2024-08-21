@@ -1,6 +1,6 @@
 import { IsOptional, IsPositive } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional, IntersectionType } from '@nestjs/swagger';
 
 export class PaginationQueryDto {
   @ApiPropertyOptional({ type: Number })
@@ -14,4 +14,14 @@ export class PaginationQueryDto {
   @IsPositive()
   @Type(() => Number)
   limit?: number;
+}
+
+export class QuerySearchDto {
+  @ApiPropertyOptional({ type: String })
+  @IsOptional()
+  @Type(() => String)
+  search?: string;
+}
+
+export class QueryDto extends IntersectionType(PaginationQueryDto, QuerySearchDto){
 }

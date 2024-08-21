@@ -13,7 +13,7 @@ import { NoteDto, UpdateNoteDto, СreateNoteDto } from '@/note/dto/note.dto';
 import { Types } from 'mongoose';
 import { UserService } from '@/user/user.service';
 import { ListResponse } from '@/common/types/list.type';
-import { PaginationQueryDto } from '@/common/dto/pagination.dto';
+import { QueryDto } from '@/common/dto/pagination.dto';
 
 @Injectable()
 export class NoteService {
@@ -40,10 +40,10 @@ export class NoteService {
 
   async getList(
     userID: string,
-    paginationQuery: PaginationQueryDto,
+    queryDto: QueryDto,
   ): Promise<ListResponse<NoteDto>> {
     try {
-      return await this.noteRepository.getList(userID, paginationQuery);
+      return await this.noteRepository.getList(userID, queryDto);
     } catch (err) {
       throw new UnprocessableEntityException(NOTE_CANNOT_GET_LIST_ERROR);
     }
