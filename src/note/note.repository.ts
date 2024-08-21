@@ -8,7 +8,7 @@ import { Model, Types } from 'mongoose';
 import { Note, NoteDocument } from '@/note/schemas/note.schema';
 import { NoteDto, UpdateNoteDto } from '@/note/dto/note.dto';
 import { ListResponse } from '@/common/types/list.type';
-import { PaginationQueryDto } from '@/common/dto/pagination.dto';
+import { QueryDto } from '@/common/dto/pagination.dto';
 import {
   NOTE_DOESNT_DELETE,
   NOTE_DOESNT_EXIST,
@@ -30,19 +30,28 @@ export class NoteRepository {
 
   async getList(
     userID: string,
-    paginationQuery: PaginationQueryDto,
+    queryDto: QueryDto,
   ): Promise<ListResponse<Note>> {
-    const { page = 1, limit = 10 } = paginationQuery;
+    const { page = 1, limit = 10, search = '' } = queryDto;
     const skip = (page - 1) * limit;
     const userObjectId = new Types.ObjectId(userID);
 
+	const searchFilter = search
+  ? {
+      $or: [
+        { topic: new RegExp(search, 'i') },
+        { description: new RegExp(search, 'i') },
+      ],
+    }
+  : {}
+
     const [notes, totalCount] = await Promise.all([
       this.noteModel
-        .find({ userID: userObjectId })
+        .find({ userID: userObjectId, ...searchFilter })
         .skip(skip)
         .limit(limit)
         .exec(),
-      this.noteModel.countDocuments({ userID: userObjectId }).exec(),
+      this.noteModel.countDocuments({ userID: userObjectId, ...searchFilter }).exec(),
     ]);
 
     return { items: notes, totalCount };
