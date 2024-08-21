@@ -12,5 +12,19 @@ export function createDateFilter<T>(
       },
     };
   }
+  if(startDate){
+	return {
+      createdAt: {
+        $gte: new Date(startDate),
+      },
+    };
+  }
+  if(endDate){
+	return {
+      createdAt: {
+        $lte: new Date(endDate),
+      },
+    };
+  }
   return {};
 }
