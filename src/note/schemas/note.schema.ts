@@ -23,7 +23,7 @@ export class Note {
   @Prop({ type: [String] })
   tags: string[];
 
-  created_at: string;
+  createdAt: string;
 
   @Prop({ required: true })
   location: string;

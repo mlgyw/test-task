@@ -10,10 +10,15 @@ import {
 } from '@/note/note.constants';
 import { NoteRepository } from '@/note/note.repository';
 import { NoteDto, UpdateNoteDto, СreateNoteDto } from '@/note/dto/note.dto';
-import { Types } from 'mongoose';
+import { FilterQuery, Types } from 'mongoose';
 import { UserService } from '@/user/user.service';
 import { ListResponse } from '@/common/types/list.type';
-import { QueryDto } from '@/common/dto/pagination.dto';
+import { QueryDto } from '@/common/dto/query.dto';
+import { Note } from './schemas/note.schema';
+import { createSearchFilter } from '@/common/filters/search.filter';
+import { createDateFilter } from '@/common/filters/date.filter';
+import { createPaginationParams } from '@/common/filters/pagination.filter';
+import { createSortParams } from '@/common/sort/multi.field.sort';
 
 @Injectable()
 export class NoteService {
@@ -43,7 +48,14 @@ export class NoteService {
     queryDto: QueryDto,
   ): Promise<ListResponse<NoteDto>> {
     try {
-      return await this.noteRepository.getList(userID, queryDto);
+      const filters = this.createNoteFilters(userID, queryDto);
+      const paginationParams = createPaginationParams(
+        queryDto.page,
+        queryDto.limit,
+      );
+
+	  const sortParams = createSortParams<Note>('createdAt', queryDto)
+      return await this.noteRepository.getList(filters, paginationParams, sortParams);
     } catch (err) {
       throw new UnprocessableEntityException(NOTE_CANNOT_GET_LIST_ERROR);
     }
@@ -79,5 +91,22 @@ export class NoteService {
     } catch (err) {
       throw err;
     }
+  }
+
+  createTagsFilter(tags?: string): FilterQuery<Note> {
+    const tagsArray = tags ? tags.split(',') : [];
+    return tagsArray.length > 0 ? { tags: { $all: tagsArray } } : {};
+  }
+
+  createNoteFilters(userID: string, queryDto: QueryDto): FilterQuery<Note> {
+    const userObjectId = new Types.ObjectId(userID);
+    const { search, startDate, endDate, tags } = queryDto;
+
+    return {
+      ...createSearchFilter<Note>(search, ['topic', 'description']),
+      ...createDateFilter(startDate, endDate),
+      ...this.createTagsFilter(tags),
+      userID: userObjectId,
+    };
   }
 }

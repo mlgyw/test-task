@@ -4,16 +4,17 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { FilterQuery, Model, Types } from 'mongoose';
 import { Note, NoteDocument } from '@/note/schemas/note.schema';
 import { NoteDto, UpdateNoteDto } from '@/note/dto/note.dto';
 import { ListResponse } from '@/common/types/list.type';
-import { QueryDto } from '@/common/dto/pagination.dto';
 import {
   NOTE_DOESNT_DELETE,
   NOTE_DOESNT_EXIST,
   NOTE_DOESNT_UPDATE,
 } from '@/note/note.constants';
+import { PaginationParams } from '@/common/interfaces/pagination.interface';
+import { SortParams } from '@/common/interfaces/sort.interface';
 
 @Injectable()
 export class NoteRepository {
@@ -29,29 +30,18 @@ export class NoteRepository {
   }
 
   async getList(
-    userID: string,
-    queryDto: QueryDto,
+    filters: FilterQuery<Note>,
+    paginationParams: PaginationParams,
+	sortParams: SortParams
   ): Promise<ListResponse<Note>> {
-    const { page = 1, limit = 10, search = '' } = queryDto;
-    const skip = (page - 1) * limit;
-    const userObjectId = new Types.ObjectId(userID);
-
-	const searchFilter = search
-  ? {
-      $or: [
-        { topic: new RegExp(search, 'i') },
-        { description: new RegExp(search, 'i') },
-      ],
-    }
-  : {}
-
     const [notes, totalCount] = await Promise.all([
       this.noteModel
-        .find({ userID: userObjectId, ...searchFilter })
-        .skip(skip)
-        .limit(limit)
+        .find(filters)
+		.sort(sortParams)
+        .skip(paginationParams.skip)
+        .limit(paginationParams.limit)
         .exec(),
-      this.noteModel.countDocuments({ userID: userObjectId, ...searchFilter }).exec(),
+      this.noteModel.countDocuments(filters).exec(),
     ]);
 
     return { items: notes, totalCount };
