@@ -32,12 +32,12 @@ export class NoteRepository {
   async getList(
     filters: FilterQuery<Note>,
     paginationParams: PaginationParams,
-	sortParams: SortParams
+    sortParams: SortParams,
   ): Promise<ListResponse<Note>> {
     const [notes, totalCount] = await Promise.all([
       this.noteModel
         .find(filters)
-		.sort(sortParams)
+        .sort(sortParams)
         .skip(paginationParams.skip)
         .limit(paginationParams.limit)
         .exec(),
