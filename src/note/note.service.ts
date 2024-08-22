@@ -13,11 +13,12 @@ import { NoteDto, UpdateNoteDto, СreateNoteDto } from '@/note/dto/note.dto';
 import { FilterQuery, Types } from 'mongoose';
 import { UserService } from '@/user/user.service';
 import { ListResponse } from '@/common/types/list.type';
-import { QueryDto } from '@/common/dto/query.dtos';
+import { QueryDto } from '@/common/dto/query.dto';
 import { Note } from './schemas/note.schema';
 import { createSearchFilter } from '@/common/filters/search.filter';
 import { createDateFilter } from '@/common/filters/date.filter';
 import { createPaginationParams } from '@/common/filters/pagination.filter';
+import { createSortParams } from '@/common/sort/multi.field.sort';
 
 @Injectable()
 export class NoteService {
@@ -52,7 +53,9 @@ export class NoteService {
         queryDto.page,
         queryDto.limit,
       );
-      return await this.noteRepository.getList(filters, paginationParams);
+
+	  const sortParams = createSortParams<Note>('createdAt', queryDto)
+      return await this.noteRepository.getList(filters, paginationParams, sortParams);
     } catch (err) {
       throw new UnprocessableEntityException(NOTE_CANNOT_GET_LIST_ERROR);
     }

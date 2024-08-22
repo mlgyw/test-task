@@ -14,6 +14,7 @@ import {
   NOTE_DOESNT_UPDATE,
 } from '@/note/note.constants';
 import { PaginationParams } from '@/common/interfaces/pagination.interface';
+import { SortParams } from '@/common/interfaces/sort.interface';
 
 @Injectable()
 export class NoteRepository {
@@ -31,10 +32,12 @@ export class NoteRepository {
   async getList(
     filters: FilterQuery<Note>,
     paginationParams: PaginationParams,
+	sortParams: SortParams
   ): Promise<ListResponse<Note>> {
     const [notes, totalCount] = await Promise.all([
       this.noteModel
         .find(filters)
+		.sort(sortParams)
         .skip(paginationParams.skip)
         .limit(paginationParams.limit)
         .exec(),

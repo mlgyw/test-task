@@ -16,7 +16,7 @@ import { NoteService } from '@/note/note.service';
 import { NoteDto, UpdateNoteDto, СreateNoteDto } from '@/note/dto/note.dto';
 import { JwtAuthGuard } from '@/auth/guards/jwt.guard';
 import { RequestWithUser } from '@/common/interfaces/request.interface';
-import { QueryDto } from '@/common/dto/query.dtos';
+import { QueryDto } from '@/common/dto/query.dto';
 import {
   ApiBearerAuth,
   ApiBody,
