@@ -10,5 +10,5 @@ export class QueryDto extends IntersectionType(
   QuerySearchDto,
   QueryDateFilterDto,
   QueryTagsFilterDto,
-  SortQueryDto
+  SortQueryDto,
 ) {}

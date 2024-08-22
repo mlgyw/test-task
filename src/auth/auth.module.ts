@@ -6,7 +6,8 @@ import { AuthService } from '@/auth/auth.service';
 import { UserModule } from '@/user/user.module';
 import { AuthController } from '@/auth/auth.conroller';
 import { PassportModule } from '@nestjs/passport';
-import { JwrStrategy } from '@/auth/strategies/jwt.strategy';
+import { JwtStrategy } from '@/auth/strategies/jwt.strategy';
+import { GoogleStrategy } from '@/auth/strategies/google.stategy';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { JwrStrategy } from '@/auth/strategies/jwt.strategy';
     PassportModule,
     ConfigModule,
   ],
-  providers: [AuthService, JwrStrategy],
+  providers: [AuthService, JwtStrategy, GoogleStrategy],
   controllers: [AuthController],
   exports: [AuthService],
 })

@@ -1,3 +1,3 @@
 export type SortParams = {
-	[x :string]: 1 | -1;
+  [x: string]: 1 | -1;
 };
