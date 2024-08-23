@@ -34,7 +34,12 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto): Promise<PublicUserDto> {
     try {
-      const hashedPassword = await this.hashPassword(createUserDto.password);
+      let hashedPassword;
+
+      if (createUserDto.password) {
+        hashedPassword = await this.hashPassword(createUserDto.password);
+      }
+
       const user = { ...createUserDto, password: hashedPassword };
 
       const dbUser = await this.userRepository.create(user);

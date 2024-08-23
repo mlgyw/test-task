@@ -12,7 +12,7 @@ export class AuthSignUpDto {
   @ApiProperty({ type: String })
   @IsString()
   @Length(1, 50)
-  name: string;
+  name?: string;
 
   @ApiProperty({ type: String })
   @IsEmail()
@@ -20,7 +20,8 @@ export class AuthSignUpDto {
 
   @ApiProperty({ type: String })
   @IsString()
-  password: string;
+  @Length(1, 50)
+  password?: string;
 }
 
 export class AuthSignInDto {

@@ -54,8 +54,12 @@ export class NoteService {
         queryDto.limit,
       );
 
-	  const sortParams = createSortParams<Note>('createdAt', queryDto)
-      return await this.noteRepository.getList(filters, paginationParams, sortParams);
+      const sortParams = createSortParams<Note>('createdAt', queryDto);
+      return await this.noteRepository.getList(
+        filters,
+        paginationParams,
+        sortParams,
+      );
     } catch (err) {
       throw new UnprocessableEntityException(NOTE_CANNOT_GET_LIST_ERROR);
     }

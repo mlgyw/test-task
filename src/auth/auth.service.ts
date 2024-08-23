@@ -34,6 +34,18 @@ export class AuthService {
     return this.generateTokens(user.email);
   }
 
+  async authWithGoogle(email: string): Promise<AuthTokensDto> {
+    const existUser = await this.userService.findUserByEmail(email);
+    if (existUser) {
+      return this.generateTokens(email);
+    }
+    const user = await this.userService.create({ email: email });
+    if (!user) {
+      throw new BadRequestException(AUTH_UNKNOWN_ERROR);
+    }
+    return this.generateTokens(user.email);
+  }
+
   async generateTokens(email: string): Promise<AuthTokensDto> {
     const accessToken = this.jwtService.sign({ sub: email });
     const refreshToken = this.jwtService.sign(
